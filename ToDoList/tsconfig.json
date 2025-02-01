@@ -13,5 +13,5 @@
     "**/*.tsx",
     ".expo/types/**/*.ts",
     "expo-env.d.ts"
-, "src/components/Tarefas/form.tsx"  ]
+, "src/components/Tarefas/cadastro/form.tsx"  ]
 }

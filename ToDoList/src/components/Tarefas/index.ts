@@ -1,3 +1,3 @@
-export { Home } from "./form";
-
+export { CadastroTarefa } from "./cadastro";
+export { Home } from "./cadastro/form";
 

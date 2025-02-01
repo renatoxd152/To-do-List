@@ -3,12 +3,13 @@ import React, { useEffect, useState } from 'react';
 import { useForm } from 'react-hook-form';
 import { Alert, Modal, Pressable, StyleSheet, TouchableOpacity, View } from 'react-native';
 import Icon from 'react-native-vector-icons/MaterialIcons';
-import { Input } from '../common';
-
-export const Home = () => {
+import { Input } from '../../common';
+interface HomeProps{
+  onSubmit:(data:Tarefa)=>void;
+}
+export const Home: React.FC<HomeProps> = ({onSubmit}) => {
   const[modalVisible,setModalVisible] = useState(false);
   const{register,setValue,handleSubmit} = useForm<Tarefa>()
-  const onSubmit = (data:Tarefa) => Alert.alert(data.titulo, data.descricao)
 
   useEffect(()=> 
 {
@@ -62,10 +63,10 @@ export const Home = () => {
 
               <Pressable
                 style={styles.buttonConfirm}
-                onPress={() =>{
-                    handleSubmit(onSubmit)
-                    setModalVisible(!modalVisible)
-                }}>
+                onPress={handleSubmit((data) => {
+                  onSubmit(data);
+                  setModalVisible(false);
+                })}>
                 <Icon name="check" size={30} color="gray" />
             </Pressable>
 
@@ -156,4 +157,3 @@ const styles = StyleSheet.create({
   
 });
 
-export default Home;

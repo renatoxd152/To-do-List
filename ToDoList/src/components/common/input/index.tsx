@@ -3,7 +3,6 @@ import { KeyboardTypeOptions, StyleProp, TextInput, TextStyle, View, ViewStyle }
 import Icon from 'react-native-vector-icons/MaterialIcons';
 interface InputProps
 {
-    label:string;
     placeHolder:string;
     styleIcon: StyleProp<TextStyle>;
     styleView:StyleProp<ViewStyle>;

@@ -1,3 +1,4 @@
+import { Tarefa } from '@/app/models/Tarefas';
 import React, { useEffect, useState } from 'react';
 import { useForm } from 'react-hook-form';
 import { Alert, Modal, Pressable, StyleSheet, TouchableOpacity, View } from 'react-native';
@@ -6,10 +7,10 @@ import { Input } from '../common';
 
 export const Home = () => {
   const[modalVisible,setModalVisible] = useState(false);
-  const{register,setValue,handleSubmit} = useForm()
-  const onSubmit = (data) => Alert.alert(data.titulo, data.descricao)
+  const{register,setValue,handleSubmit} = useForm<Tarefa>()
+  const onSubmit = (data:Tarefa) => Alert.alert(data.titulo, data.descricao)
 
-  useEffect(()=>
+  useEffect(()=> 
 {
     register('titulo'),
     register('descricao')
@@ -37,7 +38,7 @@ export const Home = () => {
             styleView={styles.inputContainer}
             nameIcon='title'
             colorIcon='gray'
-            onChangeText={text=>setValue('titulo',text)} 
+            onChange={text=>setValue('titulo',text)} 
             sizeIcon={30}
             placeHolder="Título" 
             keyboardType='default'/>
@@ -49,7 +50,7 @@ export const Home = () => {
             nameIcon='description'
             colorIcon='gray'
             sizeIcon={30}
-            onChangeText={text=>setValue('descricao',text)} 
+            onChange={text=>setValue('descricao',text)} 
             placeHolder="Descrição" 
             keyboardType='default'/>
 
@@ -89,14 +90,14 @@ const styles = StyleSheet.create({
     padding: 15,
     borderRadius: 50,
     alignItems: 'center',
-    justifyContent: 'right',
+    justifyContent: 'center',
     bottom:20,
     right:20
   },centeredView: {
     flex: 1,
     justifyContent: 'center',
     alignItems: 'center',
-    backgroundColor: (0, 0, 0, 0.5)
+    backgroundColor: 'rgba(0, 0, 0, 0.5)'
   },
   modalView: {
     margin: 20,

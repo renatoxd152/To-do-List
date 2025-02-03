@@ -28,13 +28,20 @@ export const useTarefaService = () =>
     
         }
 
-    const deleteTarefas = async (): Promise<void> => {
-        try {
-            await AsyncStorage.removeItem(STORAGE_KEY);
-        } catch (error) {
-            console.error('Erro ao limpar tarefas:', error);
-        }
+        const deleteTarefas = async (id: string): Promise<void> => {
+            try {
+                const tarefas = await list(); 
+                const novasTarefas = tarefas.filter(tarefa => tarefa.id !== id);
+        
+                await AsyncStorage.setItem(STORAGE_KEY, JSON.stringify(novasTarefas));
+            } catch (error) {
+                console.error('Erro ao remover tarefa:', error);
+            }
         };
+        
+
+
+    
     return{
         list,
         salvar,

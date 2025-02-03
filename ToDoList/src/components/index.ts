@@ -1,4 +1,3 @@
 export { Input } from './common';
-export { CadastroTarefa, Home } from './Tarefas';
-
+export { CadastroTarefa, Home, ListagemTarefas } from './Tarefas';
 

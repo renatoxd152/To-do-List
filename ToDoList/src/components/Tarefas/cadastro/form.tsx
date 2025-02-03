@@ -4,6 +4,10 @@ import { useForm } from 'react-hook-form';
 import { Alert, Modal, Pressable, StyleSheet, TouchableOpacity, View } from 'react-native';
 import Icon from 'react-native-vector-icons/MaterialIcons';
 import { Input } from '../../common';
+import { ListagemTarefas } from '../listagem';
+
+
+import uuid from 'react-native-uuid';
 interface HomeProps{
   onSubmit:(data:Tarefa)=>void;
 }
@@ -18,6 +22,7 @@ export const Home: React.FC<HomeProps> = ({onSubmit}) => {
 },[register])
   return (
     <View style={styles.container}>
+      <ListagemTarefas/>
       <TouchableOpacity style={styles.button} onPress={() => setModalVisible(true)}>
         <Icon name="add" size={30} color="#fff" />
       </TouchableOpacity>
@@ -64,7 +69,7 @@ export const Home: React.FC<HomeProps> = ({onSubmit}) => {
               <Pressable
                 style={styles.buttonConfirm}
                 onPress={handleSubmit((data) => {
-                  onSubmit(data);
+                  onSubmit({...data,id:uuid.v4(),checkbox:false});
                   setModalVisible(false);
                 })}>
                 <Icon name="check" size={30} color="gray" />

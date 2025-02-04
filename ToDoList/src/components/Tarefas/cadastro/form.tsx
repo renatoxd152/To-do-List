@@ -10,8 +10,9 @@ import { ListagemTarefas } from '../listagem';
 import uuid from 'react-native-uuid';
 interface HomeProps{
   onSubmit:(data:Tarefa)=>void;
+  tarefas:Tarefa[];
 }
-export const Home: React.FC<HomeProps> = ({onSubmit}) => {
+export const Home: React.FC<HomeProps> = ({onSubmit,tarefas}) => {
   const[modalVisible,setModalVisible] = useState(false);
   const{register,setValue,handleSubmit} = useForm<Tarefa>()
 
@@ -22,7 +23,7 @@ export const Home: React.FC<HomeProps> = ({onSubmit}) => {
 },[register])
   return (
     <View style={styles.container}>
-      <ListagemTarefas/>
+        <ListagemTarefas dadosAtualizadosTarefa={tarefas} />
       <TouchableOpacity style={styles.button} onPress={() => setModalVisible(true)}>
         <Icon name="add" size={30} color="#fff" />
       </TouchableOpacity>

@@ -1,15 +1,26 @@
 import { Tarefa } from "@/app/models/Tarefas";
 import { useTarefaService } from "@/app/services/tarefa.service";
-import { useEffect, useState } from "react";
+import React, { useEffect, useState } from "react";
 import { Listagem } from "./ListagemComponente";
-
-export const ListagemTarefas = () => {
+interface ListagemTarefasProps
+{
+    dadosAtualizadosTarefa:Tarefa[];
+}
+export const ListagemTarefas = ({dadosAtualizadosTarefa}:ListagemTarefasProps) => {
     const tarefas = useTarefaService();
     const [listaTarefas, setListaTarefas] = useState<Tarefa[]>([]);
 
     useEffect(() => {
         handleListTarefas();
     }, []);
+
+    useEffect(() => {
+        if (dadosAtualizadosTarefa.length > 0) {
+            setListaTarefas(dadosAtualizadosTarefa);
+        } else {
+            handleListTarefas();
+        }
+    }, [dadosAtualizadosTarefa]);
 
     const handleListTarefas = async () => { 
         try {

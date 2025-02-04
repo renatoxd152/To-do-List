@@ -41,7 +41,7 @@ export const Listagem:React.FC<ListagemProps> = ({
                         <Text style={styles.descricao}>{descricao}</Text>
                     </View>
                 </View>
-                <Pressable style={{marginRight:"20%"}} onPress={() => onDelete(tarefa)}>
+                <Pressable style={{paddingRight:"20%"}} onPress={() => onDelete(tarefa)}>
                     <Icon name="delete" size={30} color="red" />
                 </Pressable>
             </View>
@@ -59,6 +59,7 @@ export const Listagem:React.FC<ListagemProps> = ({
                     data={data}
                     renderItem={({ item }) => <Item tarefa={item} />}
                     keyExtractor={item => item.id}
+                    extraData={data}
                 />
                 </View>
             </SafeAreaView>

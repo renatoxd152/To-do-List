@@ -4,7 +4,7 @@ export default function Index() {
   return (
     <>
       <CadastroTarefa />
-      <StatusBar style="auto"/>
+      <StatusBar style="auto" />
     </>
   );
 }

@@ -1,9 +1,10 @@
 import { Tarefa } from "@/app/models/Tarefas";
-import React, { useState } from "react";
+import React from "react";
 import { FlatList, Pressable, StatusBar, StyleSheet, Text, View } from "react-native";
 import { CheckBox } from "react-native-elements";
 import { SafeAreaProvider, SafeAreaView } from 'react-native-safe-area-context';
 import Icon from 'react-native-vector-icons/MaterialIcons';
+
 interface ListagemProps
 {
   data:Tarefa[];
@@ -17,8 +18,6 @@ export const Listagem:React.FC<ListagemProps> = ({
     onEdit
 }) =>
 {
-  const [checkedItems, setCheckedItems] = useState<{ [key: string]: boolean }>({});
-
   const toggleCheckbox = (tarefa: Tarefa) => {
     const updatedTarefa = { ...tarefa, checkbox: !tarefa.checkbox };
     onEdit(updatedTarefa);
@@ -26,7 +25,7 @@ export const Listagem:React.FC<ListagemProps> = ({
 
   
   const Item: React.FC<{ tarefa: Tarefa }> = ({ tarefa }) => {
-    const { id, titulo, descricao,checkbox } = tarefa;
+    const { titulo, descricao } = tarefa;
 
     return (
         <View style={styles.item}>
@@ -42,7 +41,7 @@ export const Listagem:React.FC<ListagemProps> = ({
                         <Text style={styles.descricao}>{descricao}</Text>
                     </View>
                 </View>
-                <Pressable onPress={() => onDelete(tarefa)}>
+                <Pressable style={{marginRight:"20%"}} onPress={() => onDelete(tarefa)}>
                     <Icon name="delete" size={30} color="red" />
                 </Pressable>
             </View>
@@ -52,7 +51,7 @@ export const Listagem:React.FC<ListagemProps> = ({
 
 
     return(
-        <SafeAreaProvider>
+        <SafeAreaProvider style={{width:"100%"}}>
             <SafeAreaView style={styles.container}>
                 <View style={styles.container}>
                   
@@ -71,14 +70,19 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     marginTop: StatusBar.currentHeight || 0,
+    backgroundColor: '#F5F5F5',
   },
   item: {
-    backgroundColor: 'white',
+    backgroundColor: '#FFF',
     padding: 20,
-    marginVertical: 8,
+    marginVertical: 10,
     marginHorizontal: 16,
-    borderRadius: 8,
-    elevation: 2,
+    borderRadius: 12, 
+    elevation: 4,
+    shadowColor: '#000',
+    shadowOffset: { width: 0, height: 2 },
+    shadowOpacity: 0.1,
+    shadowRadius: 4,
   },
   itemContent: {
     flexDirection: 'row',
@@ -91,15 +95,17 @@ const styles = StyleSheet.create({
     flex: 1,
   },
   textContainer: {
-    marginLeft: 10,
+    marginLeft: 12,
     flex: 1,
   },
   title: {
     fontSize: 18,
     fontWeight: 'bold',
-  }, 
+    color: '#333',
+  },
   descricao: {
-      fontSize: 14,
-      color: 'black',
+    fontSize: 14,
+    color: '#666',
+    marginTop: 4,
   },
 });

@@ -38,13 +38,40 @@ export const useTarefaService = () =>
                 console.error('Erro ao remover tarefa:', error);
             }
         };
-        
+
+        const atualizar = async (tarefaAtualizada: Tarefa): Promise<void> => {
+            try {
+                const tarefas = await list();
+                const novasTarefas = tarefas.map(tarefa =>
+                    tarefa.id === tarefaAtualizada.id ? { ...tarefa, ...tarefaAtualizada } : tarefa
+                );
+    
+                await AsyncStorage.setItem(STORAGE_KEY, JSON.stringify(novasTarefas));
+            } catch (error) {
+                console.error('Erro ao atualizar tarefa:', error);
+            }
+        };
+
+        const alternarCheckbox = async (tarefa: Tarefa): Promise<void> => {
+            try {
+                const tarefas = await list();
+                const novasTarefas = tarefas.map(t =>
+                    t.id === tarefa.id ? { ...t, checkbox: !t.checkbox } : t
+                );
+    
+                await AsyncStorage.setItem(STORAGE_KEY, JSON.stringify(novasTarefas));
+            } catch (error) {
+                console.error('Erro ao alternar checkbox da tarefa:', error);
+            }
+        };
 
 
     
     return{
         list,
         salvar,
-        deleteTarefas
+        deleteTarefas,
+        atualizar,
+        alternarCheckbox
     }
 }

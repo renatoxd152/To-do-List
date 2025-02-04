@@ -36,5 +36,28 @@ export const ListagemTarefas = () => {
        }
     }
 
-    return <Listagem data={listaTarefas} onDelete={deletar}/>;
+    const editar = async(tarefasNovas:Tarefa) =>
+    {
+        try {
+           tarefas.atualizar(tarefasNovas);
+           const tarefasAtualizadas= await tarefas.list();
+           setListaTarefas(tarefasAtualizadas);
+        } catch (error) {
+            console.error("Erro ao atualizar as tarefas",error)
+        }
+    }
+
+    
+    const atualizarCheckboxItem = async(tarefa:Tarefa) =>
+    {
+        try {
+            tarefas.alternarCheckbox(tarefa);
+            const tarefasAtualizadas= await tarefas.list();
+            setListaTarefas(tarefasAtualizadas);
+        } catch (error) {
+            console.error("Erro ao atualizar as tarefas",error)
+        }
+    }
+
+    return <Listagem data={listaTarefas} onDelete={deletar} onEdit={atualizarCheckboxItem}/>;
 };

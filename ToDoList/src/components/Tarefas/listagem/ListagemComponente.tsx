@@ -8,11 +8,13 @@ interface ListagemProps
 {
   data:Tarefa[];
   onDelete:(tarefa:Tarefa) =>void;
+  onEdit:(tarefa:Tarefa)=>void;
 }
 
 export const Listagem:React.FC<ListagemProps> = ({
     data,
-    onDelete
+    onDelete,
+    onEdit
 }) =>
 {
   const [checkedItems, setCheckedItems] = useState<{ [key: string]: boolean }>({});
@@ -31,21 +33,27 @@ export const Listagem:React.FC<ListagemProps> = ({
     return (
         <View style={styles.item}>
             <View style={styles.itemContent}>
-                <CheckBox
-                    checked={!!checkedItems[id]}
-                    onPress={() => toggleCheckbox(id)}
-                />
-                <View style={styles.textContainer}>
-                    <Text style={styles.title}>{titulo}</Text>
-                    <Text style={styles.descricao}>{descricao}</Text>
-                    <Pressable onPress={() => onDelete(tarefa)}>
-                        <Icon name="delete" size={30} color="red" />
-                    </Pressable>
+                <View style={styles.textWrapper}>
+                    <CheckBox
+                        checked={!!checkedItems[id]}
+                        onPress={() => {
+                          toggleCheckbox(id)
+                          onEdit(tarefa)
+                        }}
+                    />
+                    <View style={styles.textContainer}>
+                        <Text style={styles.title}>{titulo}</Text>
+                        <Text style={styles.descricao}>{descricao}</Text>
+                    </View>
                 </View>
+                <Pressable onPress={() => onDelete(tarefa)}>
+                    <Icon name="delete" size={30} color="red" />
+                </Pressable>
             </View>
         </View>
     );
 };
+
 
     return(
         <SafeAreaProvider>
@@ -64,29 +72,38 @@ export const Listagem:React.FC<ListagemProps> = ({
 }
 
 const styles = StyleSheet.create({
-    container: {
-      flex: 1,
-      marginTop: StatusBar.currentHeight || 0,
-    },
-    item: {
-      backgroundColor: 'white',
-      padding: 20,
-      marginVertical: 8,
-      marginHorizontal: 16,
-    },
-    title: {
-      fontSize: 18,
-    }, 
-    descricao: {
-        fontSize: 14,
-        color: 'black',
-      },
-      itemContent: {
-        flexDirection: 'row',
-        alignItems: 'center',
-      },
-      textContainer: {
-        marginLeft: 10,
-        flex: 1,
-      },
-  });
+  container: {
+    flex: 1,
+    marginTop: StatusBar.currentHeight || 0,
+  },
+  item: {
+    backgroundColor: 'white',
+    padding: 20,
+    marginVertical: 8,
+    marginHorizontal: 16,
+    borderRadius: 8,
+    elevation: 2,
+  },
+  itemContent: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'space-between',
+  },
+  textWrapper: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    flex: 1,
+  },
+  textContainer: {
+    marginLeft: 10,
+    flex: 1,
+  },
+  title: {
+    fontSize: 18,
+    fontWeight: 'bold',
+  }, 
+  descricao: {
+      fontSize: 14,
+      color: 'black',
+  },
+});

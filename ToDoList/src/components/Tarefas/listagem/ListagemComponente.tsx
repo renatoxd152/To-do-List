@@ -19,28 +19,24 @@ export const Listagem:React.FC<ListagemProps> = ({
 {
   const [checkedItems, setCheckedItems] = useState<{ [key: string]: boolean }>({});
 
-  const toggleCheckbox = (id: string) => {
-    setCheckedItems(prev => ({
-        ...prev,
-        [id]: !prev[id],
-    }));
-  };
+  const toggleCheckbox = (tarefa: Tarefa) => {
+    const updatedTarefa = { ...tarefa, checkbox: !tarefa.checkbox };
+    onEdit(updatedTarefa);
+};
 
   
   const Item: React.FC<{ tarefa: Tarefa }> = ({ tarefa }) => {
-    const { id, titulo, descricao } = tarefa;
+    const { id, titulo, descricao,checkbox } = tarefa;
 
     return (
         <View style={styles.item}>
             <View style={styles.itemContent}>
                 <View style={styles.textWrapper}>
-                    <CheckBox
-                        checked={!!checkedItems[id]}
-                        onPress={() => {
-                          toggleCheckbox(id)
-                          onEdit(tarefa)
-                        }}
-                    />
+                <CheckBox
+                  checked={tarefa.checkbox}
+                  onPress={() => toggleCheckbox(tarefa)}
+              />
+
                     <View style={styles.textContainer}>
                         <Text style={styles.title}>{titulo}</Text>
                         <Text style={styles.descricao}>{descricao}</Text>

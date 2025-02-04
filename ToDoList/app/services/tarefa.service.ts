@@ -60,6 +60,7 @@ export const useTarefaService = () =>
                 );
     
                 await AsyncStorage.setItem(STORAGE_KEY, JSON.stringify(novasTarefas));
+                
             } catch (error) {
                 console.error('Erro ao alternar checkbox da tarefa:', error);
             }

@@ -48,16 +48,16 @@ export const ListagemTarefas = () => {
     }
 
     
-    const atualizarCheckboxItem = async(tarefa:Tarefa) =>
-    {
+    const atualizarCheckboxItem = async (tarefa: Tarefa) => {
         try {
-            tarefas.alternarCheckbox(tarefa);
-            const tarefasAtualizadas= await tarefas.list();
-            setListaTarefas(tarefasAtualizadas);
+            setListaTarefas(prevTarefas =>
+                prevTarefas.map(t => t.id === tarefa.id ? { ...t, checkbox: !t.checkbox } : t)
+            );
+            await tarefas.alternarCheckbox(tarefa);
         } catch (error) {
-            console.error("Erro ao atualizar as tarefas",error)
+            console.error("Erro ao atualizar checkbox da tarefa:", error);
         }
-    }
+    };
 
     return <Listagem data={listaTarefas} onDelete={deletar} onEdit={atualizarCheckboxItem}/>;
 };

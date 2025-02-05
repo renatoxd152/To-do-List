@@ -7,28 +7,41 @@ export const CadastroTarefa = () =>
 {
     const service = useTarefaService()
     const apiService = useApiService();
-    const [tarefas, setTarefas] = useState<Tarefa[]>([])
-
+    const [tarefas, setTarefas] = useState<{ arrayLocal: Tarefa[], arrayApi: Tarefa[] }>({
+        arrayLocal: [],
+        arrayApi: []
+    });
     useEffect(() => {
         carregarTarefas()
     }, [])
 
-
     const carregarTarefas = async () => {
-        
         const tarefasSalvas = await service.list();
+        const tarefasLocalStorage = await apiService.obterArray();
 
-        const tarefasApi = await apiService.listarTodos();
+        let tarefasApi: Tarefa[] = [];
+        if (tarefasLocalStorage.length === 0) {
+            tarefasApi = await apiService.listarTodos();
+            await apiService.salvarTarefasNoLocalStorage(tarefasApi);
+        } else {
+            tarefasApi = tarefasLocalStorage;
+        }
 
-        const listaFinal = [...tarefasSalvas, ...tarefasApi];
-
-        setTarefas(listaFinal);
+        
+        setTarefas({
+            arrayLocal: tarefasSalvas,
+            arrayApi: tarefasApi
+        });
     };
 
     const handleSubmit = async (tarefa: Tarefa) => {
-        await service.salvar(tarefa)
-        setTarefas(prevTarefas => [...prevTarefas, tarefa]);
-    }
+        await service.salvar(tarefa);
+        setTarefas(prevTarefas => ({
+            ...prevTarefas,
+            arrayLocal: [...prevTarefas.arrayLocal, tarefa]
+        }));
+    };
+    
     return(
         <Home onSubmit={handleSubmit} tarefas={tarefas}/>
     )

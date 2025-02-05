@@ -60,6 +60,7 @@ export const Listagem:React.FC<ListagemProps> = ({
                     renderItem={({ item }) => <Item tarefa={item} />}
                     keyExtractor={item => item.id}
                     extraData={data}
+                    
                 />
                 </View>
             </SafeAreaView>

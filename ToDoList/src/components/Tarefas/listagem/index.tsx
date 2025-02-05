@@ -1,64 +1,56 @@
 import { Tarefa } from "@/app/models/Tarefas";
+import { useApiService } from "@/app/services/api.service";
 import { useTarefaService } from "@/app/services/tarefa.service";
 import React, { useEffect, useState } from "react";
 import { Listagem } from "./ListagemComponente";
 interface ListagemTarefasProps
 {
-    dadosAtualizadosTarefa:Tarefa[];
+    dadosAtualizadosTarefa:{
+        arrayLocal: Tarefa[];
+        arrayApi: Tarefa[];
+    };
 }
 export const ListagemTarefas = ({dadosAtualizadosTarefa}:ListagemTarefasProps) => {
     const tarefas = useTarefaService();
-    const [listaTarefas, setListaTarefas] = useState<Tarefa[]>([]);
-
+    const tarefasApi = useApiService();
+    const [listaTarefas, setListaTarefas] = useState<Tarefa[]>([]); 
+    
     useEffect(() => {
         handleListTarefas();
-    }, []);
-
-    useEffect(() => {
-        if (dadosAtualizadosTarefa.length > 0) {
-            setListaTarefas(dadosAtualizadosTarefa);
-        } else {
-            handleListTarefas();
-        }
     }, [dadosAtualizadosTarefa]);
 
-    const handleListTarefas = async () => { 
+
+    const handleListTarefas = async () => {
         try {
-            const tarefasLista = await tarefas.list();
-            setListaTarefas(tarefasLista);
+            let tarefasdaApi:Tarefa[] = [];
+            if(dadosAtualizadosTarefa.arrayApi.length === 0)
+            {
+                tarefasdaApi = await tarefasApi.obterArray();
+                setListaTarefas([...dadosAtualizadosTarefa.arrayLocal, ...tarefasdaApi]);
+            }
+            setListaTarefas([...dadosAtualizadosTarefa.arrayLocal, ...dadosAtualizadosTarefa.arrayApi]);
+           
+            
+           
         } catch (error) {
             console.error("Erro ao buscar tarefas:", error);
         }
     };
-
-    const deletar = async (tarefa:Tarefa) =>
-    {
-       try{
-        await tarefas.deleteTarefas(tarefa.id).then(response=>
-        {
-            const listaAlterada = listaTarefas?.filter(t=>t.id != tarefa.id)
-            setListaTarefas(listaAlterada)
-        }
-        )
-       }
-       catch(error)
-       {
-        console.error("Erro ao deletar a tarefa:",error)
-       }
-    }
-
-    const editar = async(tarefasNovas:Tarefa) =>
-    {
+    const deletar = async (tarefa: Tarefa) => {
         try {
-           tarefas.atualizar(tarefasNovas);
-           const tarefasAtualizadas= await tarefas.list();
-           setListaTarefas(tarefasAtualizadas);
-        } catch (error) {
-            console.error("Erro ao atualizar as tarefas",error)
-        }
-    }
-
+            const existeNaListaLocal = listaTarefas.some(t => t.id === tarefa.id);
     
+            if (existeNaListaLocal) {
+                await tarefas.deleteTarefas(tarefa.id);
+            } else {
+                await tarefasApi.deleteTarefasApi(tarefa.id);
+            }
+            setListaTarefas(prevLista => prevLista.filter(t => t.id !== tarefa.id));
+        } catch (error) {
+            console.error("Erro ao deletar a tarefa:", error);
+        }
+    };
+
     const atualizarCheckboxItem = async (tarefa: Tarefa) => {
         try {
             setListaTarefas(prevTarefas =>

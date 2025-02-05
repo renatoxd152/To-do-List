@@ -10,7 +10,10 @@ import { ListagemTarefas } from '../listagem';
 import uuid from 'react-native-uuid';
 interface HomeProps{
   onSubmit:(data:Tarefa)=>void;
-  tarefas:Tarefa[];
+  tarefas: {
+    arrayLocal: Tarefa[];
+    arrayApi: Tarefa[];
+  };
 }
 export const Home: React.FC<HomeProps> = ({onSubmit,tarefas}) => {
   const[modalVisible,setModalVisible] = useState(false);

@@ -1,7 +1,7 @@
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { Tarefa } from '../models/Tarefas';
 
-const STORAGE_KEY = "@tarefas"
+const STORAGE_KEY = "tarefas"
 export const useTarefaService = () =>
 {
     const list =  async ():Promise<Tarefa[]> =>

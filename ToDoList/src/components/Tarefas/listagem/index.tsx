@@ -10,6 +10,7 @@ interface ListagemTarefasProps {
         arrayApi: Tarefa[];
     };
     searchTerm: string;
+    onTarefaAlterada: () => void;
 }
 
 interface ListaTarefas {
@@ -17,10 +18,13 @@ interface ListaTarefas {
     api: Tarefa[];
 }
 
-export const ListagemTarefas = ({ dadosAtualizadosTarefa, searchTerm }: ListagemTarefasProps) => {
+export const ListagemTarefas = ({ dadosAtualizadosTarefa, searchTerm,onTarefaAlterada }: ListagemTarefasProps) => {
     const tarefas = useTarefaService();
     const tarefasApi = useApiService();
     const [listaTarefas, setListaTarefas] = useState<ListaTarefas>({ local: [], api: [] });
+
+
+    console.log("TAREFAS COMPONENTE LISTAGEM:",listaTarefas)
 
     useEffect(() => {
         handleListTarefas();
@@ -53,18 +57,25 @@ export const ListagemTarefas = ({ dadosAtualizadosTarefa, searchTerm }: Listagem
             if (existeNaListaLocal) {
                 console.log("Deletando da lista local");
                 await tarefas.deleteTarefas(tarefa.id);
+
                 setListaTarefas(prevLista => ({
                     ...prevLista,
                     local: prevLista.local.filter(t => t.id !== tarefa.id),
                 }));
+              
+               
             } else {
                 console.log("Deletando da API");
-                await tarefasApi.deleteTarefasApi(tarefa.id);
+               
+                await tarefasApi.deleteTarefasApi(tarefa.id);   
+
                 setListaTarefas(prevLista => ({
                     ...prevLista,
                     api: prevLista.api.filter(t => t.id !== tarefa.id),
                 }));
             }
+
+            onTarefaAlterada();
         } catch (error) {
             console.error("Erro ao deletar a tarefa:", error);
         }
@@ -94,6 +105,8 @@ export const ListagemTarefas = ({ dadosAtualizadosTarefa, searchTerm }: Listagem
                 }));
                 await tarefasApi.alternarCheckbox(tarefa);
             }
+
+            onTarefaAlterada();
         } catch (error) {
             console.error("Erro ao atualizar checkbox da tarefa:", error);
         }

@@ -9,87 +9,93 @@ import { ListagemTarefas } from '../listagem';
 import uuid from 'react-native-uuid';
 import { SearchBarComponent } from '../../common';
 
-interface HomeProps{
-  onSubmit:(data:Tarefa)=>void;
+interface HomeProps {
+  onSubmit: (data: Tarefa) => void;
   tarefas: {
-    arrayLocal: Tarefa[];
-    arrayApi: Tarefa[];
+      arrayLocal: Tarefa[];
+      arrayApi: Tarefa[];
   };
+  onTarefaAlterada: () => void; // Nova prop
 }
-export const Home: React.FC<HomeProps> = ({onSubmit,tarefas}) => {
-  const[modalVisible,setModalVisible] = useState(false);
-  const[searchTerm,setSearchTerm] = useState("");
-  const{register,setValue,handleSubmit} = useForm<Tarefa>()
 
-  useEffect(()=> 
-{
-    register('titulo'),
-    register('descricao')
-},[register])
+export const Home: React.FC<HomeProps> = ({ onSubmit, tarefas, onTarefaAlterada }) => {
+  const [modalVisible, setModalVisible] = useState(false);
+  const [searchTerm, setSearchTerm] = useState("");
+  const { register, setValue, handleSubmit } = useForm<Tarefa>();
 
+  useEffect(() => {
+      register('titulo');
+      register('descricao');
+  }, [register]);
 
   return (
-    <View style={styles.container}>
-      <SearchBarComponent onChangeText={setSearchTerm} /> 
-        <ListagemTarefas dadosAtualizadosTarefa={tarefas} searchTerm={searchTerm}/>
-      <TouchableOpacity style={styles.button} onPress={() => setModalVisible(true)}>
-        <Icon name="add" size={30} color="#fff" />
-      </TouchableOpacity>
+      <View style={styles.container}>
+          <SearchBarComponent onChangeText={setSearchTerm} /> 
+          <ListagemTarefas 
+              dadosAtualizadosTarefa={tarefas} 
+              searchTerm={searchTerm} 
+              onTarefaAlterada={onTarefaAlterada}
+          />
+         
+          <TouchableOpacity style={styles.button} onPress={() => setModalVisible(true)}>
+              <Icon name="add" size={30} color="#fff" />
+          </TouchableOpacity>
 
-      <Modal animationType='slide' 
-      transparent={true} 
-      visible={modalVisible}
-      onRequestClose={()=>{
-        Alert.alert("Modal has been closed");
-        setModalVisible(!modalVisible)
-      }}
-      >
-        <View style={styles.centeredView}>
-            <View style={styles.modalView}>
+          <Modal 
+              animationType='slide' 
+              transparent={true} 
+              visible={modalVisible}
+              onRequestClose={() => {
+                  Alert.alert("Modal has been closed");
+                  setModalVisible(!modalVisible);
+              }}
+          >
+              <View style={styles.centeredView}>
+                  <View style={styles.modalView}>
+                      <Input 
+                          styleInput={styles.input} 
+                          styleIcon={styles.icon}
+                          styleView={styles.inputContainer}
+                          nameIcon='title'
+                          colorIcon='gray'
+                          onChange={text => setValue('titulo', text)} 
+                          sizeIcon={30}
+                          placeHolder="Título" 
+                          keyboardType='default'
+                      />
 
-            <Input 
-            styleInput={styles.input} 
-            styleIcon={styles.icon}
-            styleView={styles.inputContainer}
-            nameIcon='title'
-            colorIcon='gray'
-            onChange={text=>setValue('titulo',text)} 
-            sizeIcon={30}
-            placeHolder="Título" 
-            keyboardType='default'/>
+                      <Input 
+                          styleInput={styles.input} 
+                          styleIcon={styles.icon}
+                          styleView={styles.inputContainer}
+                          nameIcon='description'
+                          colorIcon='gray'
+                          sizeIcon={30}
+                          onChange={text => setValue('descricao', text)} 
+                          placeHolder="Descrição" 
+                          keyboardType='default'
+                      />
 
-            <Input 
-            styleInput={styles.input} 
-            styleIcon={styles.icon}
-            styleView={styles.inputContainer}
-            nameIcon='description'
-            colorIcon='gray'
-            sizeIcon={30}
-            onChange={text=>setValue('descricao',text)} 
-            placeHolder="Descrição" 
-            keyboardType='default'/>
+                      <Pressable
+                          style={styles.buttonClose}
+                          onPress={() => setModalVisible(!modalVisible)}
+                      >
+                          <Icon name="close" size={30} color="gray" />
+                      </Pressable>
 
-              <Pressable
-                style={styles.buttonClose}
-                onPress={() => setModalVisible(!modalVisible)}>
-                  <Icon name="close" size={30} color="gray" />
-              </Pressable>
-
-              <Pressable
-                style={styles.buttonConfirm}
-                onPress={handleSubmit((data) => {
-                  onSubmit({...data,id:uuid.v4(),checkbox:false});
-                  setModalVisible(false);
-                })}>
-                <Icon name="check" size={30} color="gray" />
-            </Pressable>
-
-
-            </View>
-          </View>
-      </Modal>
-    </View>
-    
+                      <Pressable
+                          style={styles.buttonConfirm}
+                          onPress={handleSubmit((data) => {
+                              onSubmit({ ...data, id: uuid.v4(), checkbox: false });
+                              setModalVisible(false);
+                          })}
+                      >
+                          <Icon name="check" size={30} color="gray" />
+                      </Pressable>
+                  </View>
+              </View>
+          </Modal>
+      </View>
   );
 };
 

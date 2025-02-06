@@ -6,7 +6,7 @@ interface SearchBarComponentProps {
   onChangeText: (text: string) => void;
 }
 
-export const SwitchComponent: React.FunctionComponent<SearchBarComponentProps> = ({ onChangeText }) => {
+export const SearchBarComponent: React.FunctionComponent<SearchBarComponentProps> = ({ onChangeText }) => {
   const [search, setSearch] = useState("");
 
   const updateSearch = (search: string) => {
@@ -15,18 +15,35 @@ export const SwitchComponent: React.FunctionComponent<SearchBarComponentProps> =
   };
 
   return (
-    <View style={styles.view}>
+    <View style={styles.container}>
       <SearchBar
         placeholder="Procure sua tarefa ..."
         onChangeText={updateSearch}
         value={search}
+        containerStyle={styles.searchContainer}
+        inputContainerStyle={styles.inputContainer}
+        inputStyle={{color:"#000"}}
       />
     </View>
   );
 };
 
 const styles = StyleSheet.create({
-  view: {
-    margin: 10,
+  container: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    paddingHorizontal: 10,
+    marginVertical: 8,
+    width: '100%'
+  },
+  searchContainer: {
+    width: "100%",
+    backgroundColor: "transparent",
+    borderTopWidth: 0,
+    borderBottomWidth: 0,
+  },
+  inputContainer: {
+    backgroundColor: "#fff",
+    borderRadius: 10,
   },
 });

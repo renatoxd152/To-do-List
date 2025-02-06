@@ -1,2 +1,3 @@
 export { Input } from './input/';
-export { SwitchComponent } from './searchBar';
+export { SearchBarComponent } from './searchBar';
+

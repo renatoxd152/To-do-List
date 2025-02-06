@@ -3,10 +3,11 @@ import React, { useEffect, useState } from 'react';
 import { useForm } from 'react-hook-form';
 import { Alert, Modal, Pressable, StyleSheet, TouchableOpacity, View } from 'react-native';
 import Icon from 'react-native-vector-icons/MaterialIcons';
-import { Input, SwitchComponent } from '../../common';
+import { Input } from '../../common';
 import { ListagemTarefas } from '../listagem';
 
 import uuid from 'react-native-uuid';
+import { SearchBarComponent } from '../../common';
 
 interface HomeProps{
   onSubmit:(data:Tarefa)=>void;
@@ -26,18 +27,11 @@ export const Home: React.FC<HomeProps> = ({onSubmit,tarefas}) => {
     register('descricao')
 },[register])
 
-const filteredTarefas = {
-  arrayLocal: tarefas.arrayLocal.filter(tarefa =>
-    tarefa.titulo.toLowerCase().includes(searchTerm.toLowerCase())
-  ),
-  arrayApi: tarefas.arrayApi.filter(tarefa =>
-    tarefa.titulo.toLowerCase().includes(searchTerm.toLowerCase())
-  ),
-};
+
   return (
     <View style={styles.container}>
-      <SwitchComponent onChangeText={setSearchTerm} /> 
-        <ListagemTarefas dadosAtualizadosTarefa={filteredTarefas} />
+      <SearchBarComponent onChangeText={setSearchTerm} /> 
+        <ListagemTarefas dadosAtualizadosTarefa={tarefas} searchTerm={searchTerm}/>
       <TouchableOpacity style={styles.button} onPress={() => setModalVisible(true)}>
         <Icon name="add" size={30} color="#fff" />
       </TouchableOpacity>

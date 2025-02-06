@@ -9,6 +9,7 @@ interface ListagemTarefasProps {
         arrayLocal: Tarefa[];
         arrayApi: Tarefa[];
     };
+    searchTerm: string;
 }
 
 interface ListaTarefas {
@@ -16,30 +17,31 @@ interface ListaTarefas {
     api: Tarefa[];
 }
 
-export const ListagemTarefas = ({ dadosAtualizadosTarefa }: ListagemTarefasProps) => {
+export const ListagemTarefas = ({ dadosAtualizadosTarefa, searchTerm }: ListagemTarefasProps) => {
     const tarefas = useTarefaService();
     const tarefasApi = useApiService();
     const [listaTarefas, setListaTarefas] = useState<ListaTarefas>({ local: [], api: [] });
 
     useEffect(() => {
         handleListTarefas();
-    }, [dadosAtualizadosTarefa]);
+    }, [dadosAtualizadosTarefa, searchTerm]);
 
     const handleListTarefas = async () => {
         try {
             let tarefasdaApi: Tarefa[] = [];
             if (dadosAtualizadosTarefa.arrayApi.length === 0) {
                 tarefasdaApi = await tarefasApi.obterArray();
-                setListaTarefas({
-                    local: dadosAtualizadosTarefa.arrayLocal,
-                    api: tarefasdaApi,
-                });
             } else {
-                setListaTarefas({
-                    local: dadosAtualizadosTarefa.arrayLocal,
-                    api: dadosAtualizadosTarefa.arrayApi,
-                });
+                tarefasdaApi = dadosAtualizadosTarefa.arrayApi;
             }
+
+            const filteredLocal = filtrarTarefas(dadosAtualizadosTarefa.arrayLocal, searchTerm);
+            const filteredApi = filtrarTarefas(tarefasdaApi, searchTerm);
+
+            setListaTarefas({
+                local: filteredLocal,
+                api: filteredApi,
+            });
         } catch (error) {
             console.error("Erro ao buscar tarefas:", error);
         }
@@ -68,6 +70,13 @@ export const ListagemTarefas = ({ dadosAtualizadosTarefa }: ListagemTarefasProps
         }
     };
 
+
+    const filtrarTarefas = (tarefas: Tarefa[], searchTerm: string): Tarefa[] => {
+        return tarefas.filter(tarefa =>
+            tarefa.titulo.toLowerCase().includes(searchTerm.toLowerCase())
+        );
+    };
+    
     const atualizarCheckboxItem = async (tarefa: Tarefa) => {
         try {
             const isLocal = listaTarefas.local.some(t => t.id === tarefa.id);

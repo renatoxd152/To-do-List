@@ -70,12 +70,21 @@ export const ListagemTarefas = ({ dadosAtualizadosTarefa }: ListagemTarefasProps
 
     const atualizarCheckboxItem = async (tarefa: Tarefa) => {
         try {
-            setListaTarefas(prevTarefas => ({
-                ...prevTarefas,
-                local: prevTarefas.local.map(t => t.id === tarefa.id ? { ...t, checkbox: !t.checkbox } : t),
-                api: prevTarefas.api.map(t => t.id === tarefa.id ? { ...t, checkbox: !t.checkbox } : t),
-            }));
-            await tarefas.alternarCheckbox(tarefa);
+            const isLocal = listaTarefas.local.some(t => t.id === tarefa.id);
+
+            if (isLocal) {
+                setListaTarefas(prevTarefas => ({
+                    ...prevTarefas,
+                    local: prevTarefas.local.map(t => t.id === tarefa.id ? { ...t, checkbox: !t.checkbox } : t),
+                }));
+                await tarefas.alternarCheckbox(tarefa);
+            } else {
+                setListaTarefas(prevTarefas => ({
+                    ...prevTarefas,
+                    api: prevTarefas.api.map(t => t.id === tarefa.id ? { ...t, checkbox: !t.checkbox } : t),
+                }));
+                await tarefasApi.alternarCheckbox(tarefa);
+            }
         } catch (error) {
             console.error("Erro ao atualizar checkbox da tarefa:", error);
         }

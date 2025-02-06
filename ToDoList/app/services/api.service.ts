@@ -58,12 +58,27 @@ export const useApiService = () =>
         return tarefasLocalStorage ? JSON.parse(tarefasLocalStorage) as Tarefa[] : [];
     };
 
+    const alternarCheckbox = async (tarefa: Tarefa): Promise<void> => {
+        try {
+            const tarefas = await list();
+            const novasTarefas = tarefas.map(t =>
+                t.id === tarefa.id ? { ...t, checkbox: !t.checkbox } : t
+            );
+
+            await AsyncStorage.setItem(STORAGE_KEY, JSON.stringify(novasTarefas));
+            
+        } catch (error) {
+            console.error('Erro ao alternar checkbox da tarefa:', error);
+        }
+    };
+
 
     return{
         listarTodos,
         salvarTarefasNoLocalStorage,
         obterArray,
         deleteTarefasApi,
-        list
+        list,
+        alternarCheckbox
     }
 }

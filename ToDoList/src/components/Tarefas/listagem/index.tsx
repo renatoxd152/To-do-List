@@ -23,9 +23,6 @@ export const ListagemTarefas = ({ dadosAtualizadosTarefa, searchTerm,onTarefaAlt
     const tarefasApi = useApiService();
     const [listaTarefas, setListaTarefas] = useState<ListaTarefas>({ local: [], api: [] });
 
-
-    console.log("TAREFAS COMPONENTE LISTAGEM:",listaTarefas)
-
     useEffect(() => {
         handleListTarefas();
     }, [dadosAtualizadosTarefa, searchTerm]);

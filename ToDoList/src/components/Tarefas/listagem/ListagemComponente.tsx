@@ -54,13 +54,13 @@ export const Listagem:React.FC<ListagemProps> = ({
             <SafeAreaView style={styles.container}>
                 <View style={styles.container}>
                   
-                <FlatList
-                    data={data}
-                    renderItem={({ item }) => <Item tarefa={item} />}
-                    keyExtractor={item => item.id}
-                    extraData={data}
-                    
-                />
+                  <FlatList
+                      data={data}
+                      renderItem={({ item }) => <Item tarefa={item} />}
+                      keyExtractor={item => item.id}
+                      extraData={data}
+                      
+                  />
                 </View>
             </SafeAreaView>
         </SafeAreaProvider>

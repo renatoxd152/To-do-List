@@ -3,11 +3,11 @@ import React, { useEffect, useState } from 'react';
 import { useForm } from 'react-hook-form';
 import { Alert, Modal, Pressable, StyleSheet, TouchableOpacity, View } from 'react-native';
 import Icon from 'react-native-vector-icons/MaterialIcons';
-import { Input } from '../../common';
+import { Input, SwitchComponent } from '../../common';
 import { ListagemTarefas } from '../listagem';
 
-
 import uuid from 'react-native-uuid';
+
 interface HomeProps{
   onSubmit:(data:Tarefa)=>void;
   tarefas: {
@@ -17,6 +17,7 @@ interface HomeProps{
 }
 export const Home: React.FC<HomeProps> = ({onSubmit,tarefas}) => {
   const[modalVisible,setModalVisible] = useState(false);
+  const[searchTerm,setSearchTerm] = useState("");
   const{register,setValue,handleSubmit} = useForm<Tarefa>()
 
   useEffect(()=> 
@@ -24,9 +25,19 @@ export const Home: React.FC<HomeProps> = ({onSubmit,tarefas}) => {
     register('titulo'),
     register('descricao')
 },[register])
+
+const filteredTarefas = {
+  arrayLocal: tarefas.arrayLocal.filter(tarefa =>
+    tarefa.titulo.toLowerCase().includes(searchTerm.toLowerCase())
+  ),
+  arrayApi: tarefas.arrayApi.filter(tarefa =>
+    tarefa.titulo.toLowerCase().includes(searchTerm.toLowerCase())
+  ),
+};
   return (
     <View style={styles.container}>
-        <ListagemTarefas dadosAtualizadosTarefa={tarefas} />
+      <SwitchComponent onChangeText={setSearchTerm} /> 
+        <ListagemTarefas dadosAtualizadosTarefa={filteredTarefas} />
       <TouchableOpacity style={styles.button} onPress={() => setModalVisible(true)}>
         <Icon name="add" size={30} color="#fff" />
       </TouchableOpacity>

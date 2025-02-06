@@ -15,7 +15,7 @@ interface HomeProps {
       arrayLocal: Tarefa[];
       arrayApi: Tarefa[];
   };
-  onTarefaAlterada: () => void; // Nova prop
+  onTarefaAlterada: () => void;
 }
 
 export const Home: React.FC<HomeProps> = ({ onSubmit, tarefas, onTarefaAlterada }) => {

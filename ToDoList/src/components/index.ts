@@ -1,3 +1,3 @@
 export { Input, SearchBarComponent } from './common';
-export { CadastroTarefa, Home, ListagemTarefas } from './Tarefas';
+export { Home, ListagemTarefas } from './Tarefas';
 

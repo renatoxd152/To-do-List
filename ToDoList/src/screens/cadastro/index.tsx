@@ -2,7 +2,7 @@ import { Tarefa } from "@/app/models/Tarefas"
 import { useApiService } from "@/app/services/api.service"
 import { useTarefaService } from "@/app/services/tarefa.service"
 import { useEffect, useState } from "react"
-import { Home } from "./form"
+import { Home } from "../../components/Tarefas/cadastro/form"
 export const CadastroTarefa = () => {
     const service = useTarefaService();
     const apiService = useApiService();

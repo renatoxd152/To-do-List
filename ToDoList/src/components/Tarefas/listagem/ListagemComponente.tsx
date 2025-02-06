@@ -26,7 +26,6 @@ export const Listagem:React.FC<ListagemProps> = ({
   
   const Item: React.FC<{ tarefa: Tarefa }> = ({ tarefa }) => {
     const { titulo, descricao } = tarefa;
-
     return (
         <View style={styles.item}>
             <View style={styles.itemContent}>

@@ -20,7 +20,9 @@ export const CadastroTarefa = () =>
         const tarefasLocalStorage = await apiService.obterArray();
 
         let tarefasApi: Tarefa[] = [];
+       
         if (tarefasLocalStorage.length === 0) {
+            console.log("oi")
             tarefasApi = await apiService.listarTodos();
             await apiService.salvarTarefasNoLocalStorage(tarefasApi);
         } else {

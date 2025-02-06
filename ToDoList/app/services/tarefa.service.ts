@@ -34,6 +34,7 @@ export const useTarefaService = () =>
                 const novasTarefas = tarefas.filter(tarefa => tarefa.id !== id);
         
                 await AsyncStorage.setItem(STORAGE_KEY, JSON.stringify(novasTarefas));
+
             } catch (error) {
                 console.error('Erro ao remover tarefa:', error);
             }

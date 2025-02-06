@@ -15,21 +15,35 @@ export const useApiService = () =>
             descricao: item.body, 
             checkbox: false
         }));
-    
         return tarefas;
     };
 
+    const list = async():Promise<Tarefa[]>=>
+    {
+        try {
+            const jsonValue = await AsyncStorage.getItem(STORAGE_KEY);
+            return jsonValue ? JSON.parse(jsonValue): [];
+        } catch (error) {
+            console.error('Erro ao obter tarefas:', error);
+            return [];
+        }
+    }
+
     const salvarTarefasNoLocalStorage = async (tarefas: Tarefa[]) => {
-        const tarefasExistentes = localStorage.getItem(STORAGE_KEY);
+        try {
+            const tarefasExistentes = await AsyncStorage.getItem(STORAGE_KEY);
+            
+            if (tarefasExistentes) return;
         
-        if (tarefasExistentes) return;
-    
-        localStorage.setItem(STORAGE_KEY, JSON.stringify(tarefas));
+            await AsyncStorage.setItem(STORAGE_KEY, JSON.stringify(tarefas));
+        } catch (error) {
+            console.error('Erro ao salvar tarefas:', error);
+        }
     };
 
     const deleteTarefasApi = async (id: string): Promise<void> => {
         try {
-            const tarefas = await listarTodos(); 
+            const tarefas = await list(); 
             const novasTarefas = tarefas.filter(tarefa => tarefa.id !== id);
     
             await AsyncStorage.setItem(STORAGE_KEY, JSON.stringify(novasTarefas));
@@ -37,6 +51,7 @@ export const useApiService = () =>
             console.error('Erro ao remover tarefa:', error);
         }
     };
+    
     
     const obterArray = async (): Promise<Tarefa[]> => {
         const tarefasLocalStorage = localStorage.getItem(STORAGE_KEY);
@@ -48,6 +63,7 @@ export const useApiService = () =>
         listarTodos,
         salvarTarefasNoLocalStorage,
         obterArray,
-        deleteTarefasApi
+        deleteTarefasApi,
+        list
     }
 }

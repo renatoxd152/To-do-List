@@ -54,9 +54,15 @@ export const useApiService = () =>
     
     
     const obterArray = async (): Promise<Tarefa[]> => {
-        const tarefasLocalStorage = localStorage.getItem(STORAGE_KEY);
-        return tarefasLocalStorage ? JSON.parse(tarefasLocalStorage) as Tarefa[] : [];
+        try {
+            const jsonValue = await AsyncStorage.getItem(STORAGE_KEY);
+            return jsonValue ? JSON.parse(jsonValue) : [];
+        } catch (error) {
+            console.error('Erro ao obter tarefas:', error);
+            return [];
+        }
     };
+    
 
     const alternarCheckbox = async (tarefa: Tarefa): Promise<void> => {
         try {
